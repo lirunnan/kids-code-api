@@ -67,6 +67,38 @@ class ImageController extends Controller {
       ctx.body = { success: false, message: '文件上传失败' };
     }
   }
+  async list() {
+    const { ctx } = this;
+    try {
+      const uploadDir = this.config.uploadDir(this.app.config.env);
+      const fullPath = uploadDir.replace('app/public', ''); // 处理开发环境路径
+
+      // 读取目录下所有文件
+      const files = await fs.promises.readdir(fullPath);
+
+      // 过滤掉目录，只返回文件
+      const fileList = await Promise.all(
+        files.map(async file => {
+          const stat = await fs.promises.stat(path.join(fullPath, file));
+          return stat.isFile() ? {
+            name: file,
+            url: `/public/uploads/${file}`,
+            size: stat.size,
+            mtime: stat.mtime,
+          } : null;
+        })
+      );
+
+      ctx.body = {
+        success: true,
+        data: fileList.filter(Boolean),
+      };
+    } catch (err) {
+      ctx.logger.error('获取文件列表失败:', err);
+      ctx.status = 500;
+      ctx.body = { success: false, message: '获取文件列表失败' };
+    }
+  }
 }
 
 module.exports = ImageController;
