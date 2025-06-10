@@ -74,15 +74,16 @@ class ImageController extends Controller {
     const { ctx } = this;
     try {
       const uploadDir = this.config.uploadDir(this.app.config.env);
-      const fullPath = path.isAbsolute(uploadDir) ? 
-        uploadDir : 
+      const fullPath = path.isAbsolute(uploadDir) ?
+        uploadDir :
         path.join(this.app.baseDir, uploadDir);
-
+      console.log(111, fullPath);
       // 确保目录存在
       await fs.promises.mkdir(fullPath, { recursive: true });
-
+      console.log(222, fullPath);
       // 读取目录下所有文件
       const files = await fs.promises.readdir(fullPath);
+      console.log(333, files);
 
       // 过滤掉目录，只返回文件
       const fileList = await Promise.all(
@@ -96,6 +97,8 @@ class ImageController extends Controller {
           } : null;
         })
       );
+
+      console.log(44444, fileList);
 
       ctx.body = {
         success: true,
