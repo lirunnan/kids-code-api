@@ -24,7 +24,7 @@ class ImageController extends Controller {
         }
 
         // 生成文件保存路径(根据环境自动选择)
-        const savePath = path.join(this.config.uploadDir.getUploadDir(), file.filename);
+        const savePath = path.join(this.config.uploadDir(this.app.config.env), file.filename);
 
         // 保存文件
         await fs.promises.rename(file.filepath, savePath);
@@ -45,7 +45,7 @@ class ImageController extends Controller {
 
         // 获取文件名
         const filename = path.basename(filePath);
-        const savePath = path.join(this.config.uploadDir.getUploadDir(), filename);
+        const savePath = path.join(this.config.uploadDir(this.app.config.env), filename);
 
         // 复制文件到上传目录
         await fs.promises.copyFile(filePath, savePath);
