@@ -23,8 +23,8 @@ class ImageController extends Controller {
           return;
         }
 
-        // 生成文件保存路径
-        const savePath = path.join('app/public/uploads', file.filename);
+        // 生成文件保存路径(根据环境自动选择)
+        const savePath = path.join(this.config.uploadDir.getUploadDir(), file.filename);
 
         // 保存文件
         await fs.promises.rename(file.filepath, savePath);
@@ -32,7 +32,7 @@ class ImageController extends Controller {
         ctx.body = {
           success: true,
           message: '文件上传成功',
-          filePath: `/public/uploads/${file.filename}`,
+          filePath: `/public/uploads/${file.filename}`, // URL路径保持不变
         };
       } else if (ctx.request.body && ctx.request.body.filePath) {
         // 处理JSON格式的文件路径上传
@@ -45,7 +45,7 @@ class ImageController extends Controller {
 
         // 获取文件名
         const filename = path.basename(filePath);
-        const savePath = path.join('app/public/uploads', filename);
+        const savePath = path.join(this.config.uploadDir.getUploadDir(), filename);
 
         // 复制文件到上传目录
         await fs.promises.copyFile(filePath, savePath);
@@ -53,7 +53,7 @@ class ImageController extends Controller {
         ctx.body = {
           success: true,
           message: '文件上传成功',
-          url: `/public/uploads/${filename}`,
+          url: `/public/uploads/${filename}`, // URL路径保持不变
         };
       } else {
         ctx.status = 400;
