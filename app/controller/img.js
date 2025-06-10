@@ -71,7 +71,9 @@ class ImageController extends Controller {
     const { ctx } = this;
     try {
       const uploadDir = this.config.uploadDir(this.app.config.env);
-      const fullPath = uploadDir.replace('app/public', ''); // 处理开发环境路径
+      const fullPath = path.isAbsolute(uploadDir) ? 
+        uploadDir : 
+        path.join(this.app.baseDir, uploadDir);
 
       // 读取目录下所有文件
       const files = await fs.promises.readdir(fullPath);
