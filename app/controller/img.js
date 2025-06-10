@@ -28,6 +28,9 @@ class ImageController extends Controller {
         // 生成文件保存路径(根据环境自动选择)
         const savePath = path.join(this.config.uploadDir(this.app.config.env), file.filename);
 
+        // 确保目录存在
+        await fs.promises.mkdir(path.dirname(savePath), { recursive: true });
+
         // 保存文件
         await fs.promises.rename(file.filepath, savePath);
 
@@ -74,6 +77,9 @@ class ImageController extends Controller {
       const fullPath = path.isAbsolute(uploadDir) ? 
         uploadDir : 
         path.join(this.app.baseDir, uploadDir);
+
+      // 确保目录存在
+      await fs.promises.mkdir(fullPath, { recursive: true });
 
       // 读取目录下所有文件
       const files = await fs.promises.readdir(fullPath);
