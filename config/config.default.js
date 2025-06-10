@@ -40,6 +40,7 @@ module.exports = appInfo => {
       const paths = {
         dev: 'app/public/uploads',
         prod: 'root/workspace/website/build/public/uploads',
+        file: '/root/workspace/website/build/public/uploads',
       };
       return paths[env === 'prod' ? 'prod' : 'dev'];
     },
