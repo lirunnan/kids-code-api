@@ -36,13 +36,13 @@ module.exports = appInfo => {
 
   // add your user config here
   const userConfig = {
-    uploadDir: (env) => {
+    uploadDir: env => {
       const paths = {
         dev: 'app/public/uploads',
-        prod: '/root/workspace/website/build/public/uploads'
+        prod: 'root/workspace/website/build/public/uploads',
       };
       return paths[env === 'prod' ? 'prod' : 'dev'];
-    }
+    },
   };
 
   return {

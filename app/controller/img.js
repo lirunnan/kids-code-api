@@ -10,6 +10,8 @@ class ImageController extends Controller {
   async upload() {
     const { ctx } = this;
     try {
+      // 记录当前环境信息
+      ctx.logger.info('当前运行环境:', this.app.config.env);
       // 支持两种上传方式：multipart/form-data和JSON格式
       if (ctx.request.files && ctx.request.files[0]) {
         // 处理multipart/form-data文件上传
