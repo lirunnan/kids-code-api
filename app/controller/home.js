@@ -7,6 +7,7 @@ const Controller = require('egg').Controller;
 
 class ImageController extends Controller {
   async index() {
+    const { ctx } = this;
     ctx.body = { message: 'hello' };
   }
 }
